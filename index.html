@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💌 Mensaje de Amor</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FFC3A0, #FFDEE9);
+            color: #4A4A4A;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.2em;
+            color: #D63384;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .envelope-container {
+            position: relative;
+            width: 250px;
+            height: 180px;
+            cursor: pointer;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        .envelope {
+            width: 100%;
+            height: 100%;
+            background: #FF758C;
+            position: absolute;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .flap {
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            background: #FF5D73;
+            top: 0;
+            clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+            transition: transform 0.5s ease-in-out;
+            transform-origin: top;
+        }
+
+        .message {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            max-width: 400px;
+            padding: 10px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #333;
+            text-align: justify;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+        }
+
+        .opened .flap {
+            transform: rotateX(180deg);
+        }
+
+        .opened .message {
+            opacity: 1;
+        }
+
+        .closed .flap {
+            transform: rotateX(0deg);
+        }
+
+        .closed .message {
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Estilo de corazones */
+        .heart {
+            color: #ff6b81;
+            font-size: 1.5em;
+            position: absolute;
+            animation: floatUp 4s infinite ease-in;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-300px);
+                opacity: 0;
+            }
+        }
+
+        /* Estilo del mensaje final */
+        .final-message {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5em;
+            color: #D63384;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .show-final {
+            opacity: 1;
+        }
+        
+        @media (max-width: 480px) {
+            .envelope-container.opened .message {
+                top: 20%;
+                transform: translate(-50%, -20%);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="title">Katerin 💖💖💖 💌 Un Mensaje Para Ti 💖</h1>
+    
+    <div class="envelope-container" onclick="openEnvelope()">
+        <div class="envelope">
+            <div class="flap"></div>
+        </div>
+        <div class="message">
+            <p id="typedText"></p>
+        </div>
+    </div>
+
+    <div id="heartsContainer"></div>
+
+    <!-- Mensaje Final -->
+    <h1 class="final-message" id="finalMessage">Te quiero mucho 💖</h1>
+
+    <script>
+        function openEnvelope() {
+            document.querySelector('.envelope-container').classList.add('opened');
+            document.getElementById('title').classList.add('hidden');
+
+            const message = `💕 Desde que te conocí, hay algo en ti que me hace sonreír sin razón.  
+            Tu alegría, tu forma de ver la vida y esa luz que tienes me encantan. ✨  
+            No sé si alguna vez te lo he dicho, pero cada momento contigo es especial.  
+            Quería aprovechar este día para decirte que me gustas muchísimo.  
+            Espero que este sea el comienzo de muchos momentos juntos. 💖`;
+
+            let i = 0;
+            const speed = 50;
+
+            function typeWriter() {
+                if (i < message.length) {
+                    document.getElementById("typedText").innerHTML += message.charAt(i);
+                    i++;
+                    createHeart();
+                    setTimeout(typeWriter, speed);
+                } else {
+                    setTimeout(closeEnvelope, 2000); // Cierra el sobre después de 2s
+                }
+            }
+
+            setTimeout(typeWriter, 500);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = '💖';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            document.getElementById('heartsContainer').appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        function closeEnvelope() {
+            document.querySelector('.envelope-container').classList.add('closed');
+            setTimeout(() => {
+                document.getElementById('finalMessage').classList.add('show-final');
+            }, 1500); // Aparece el mensaje final después de cerrar el sobre
+        }
+    </script>
+
+</body>
+</html>
